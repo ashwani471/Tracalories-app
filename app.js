@@ -49,6 +49,14 @@ const itemCtrl = (function(){
            const newItem = new Item(ID,name,calories);
            data.items.push(newItem);
            return newItem;
+        },
+        getTotalCalories:function(){
+            let totalCalory=0;
+            data.items.forEach((item)=>{
+                totalCalory+=item.calories;
+            })
+            data.totalcalories = totalCalory;
+            return data.totalcalories;
         }
     }
 })();
@@ -61,6 +69,7 @@ const uiCtrl = (function(){
         addBtn:'.add-btn',
         itemName:'item-name',
         itemCalories:'item-calories',
+        totalCalories:'.total-calories'
     }
 
  return{  
@@ -104,6 +113,9 @@ const uiCtrl = (function(){
   },
   hideList:function(){
     document.getElementById(uiSelectors.itemList).style.display = 'none';
+  },
+  showTotalCalories:function(fulldaycalories){
+   document.querySelector(uiSelectors.totalCalories).innerHTML=fulldaycalories;
   }
  }
 })();
@@ -126,6 +138,14 @@ const appCtrl = (function(itemCtrl , uiCtrl){
               const newItem = itemCtrl.addItem(input.name,input.calories);
 
               uiCtrl.addtoList(newItem);
+
+              //get total calories
+              const totalCalories=itemCtrl.getTotalCalories();
+            //   console.log(totalCalories);
+
+              //show total calories
+              uiCtrl.showTotalCalories(totalCalories);
+
               uiCtrl.clearFields();
         }
         e.preventDefault();
@@ -145,8 +165,6 @@ const appCtrl = (function(itemCtrl , uiCtrl){
             uiCtrl.populateItem(item);
             }
 
-            
-            
             loadEventListner()
         }
     }
